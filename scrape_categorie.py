@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 import requests
 from bs4 import BeautifulSoup
 from scrape_book import scrape_book
 from pagination import pagination
+import urllib.request
 import argparse
 import os
 import csv
@@ -19,10 +21,12 @@ def scrape_categorie(url,name):
             for book in all_book:
                 all_book = 'https://books.toscrape.com/catalogue/'+book.find('a')['href'].replace('../', '')
                 img_url = 'https://books.toscrape.com/' + book.find('img')['src'].replace('../', '')
-                with open(name, 'w') as file_url:
-                    url = img_url
-                    r = requests.(url)
-
+                name_img = book.find('img')['alt']
+                print(name_img)
+                print(img_url)
+                response = requests.get(img_url)
+                with open(os.path.join(name,name_img+'.jpg'), "wb") as f:
+                    f.write(response.content)
 
                # with open(name+"/fichier.csv", 'a', newline='') as f:
 
