@@ -1,54 +1,48 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 import requests
 from bs4 import BeautifulSoup
 from scrape_book import scrape_book
-from pagination import pagination
-import urllib.request
 import argparse
 import os
 import csv
 
 
-def scrape_categorie(url,name):
+def scrape_categorie(url, name):
     r = requests.get(url)
-    os.mkdir(name)#Création de dossier pour écriture de fichier csv
+    os.mkdir(name)      #création de dossier pour le fichier csv
+    os.mkdir(name + '/' + 'img')        #création d'un dossier image pour les image
+    url = url.replace('index.html','')      #replace l'index.html
     soup = BeautifulSoup(r.content, 'lxml')
-    all_book = soup.findAll('div', {'class': 'image_container'})
-    #categorie = soup.findAll('ul', {'nav nav-list'})
-    #print(categorie)
-    if soup.find('li', {'class': 'next'}):#Écriture de fichier pour les rubrique avec plusieur page
-        while soup.find('li', {'class': 'next'}):
-            for book in all_book:
-                all_book = 'https://books.toscrape.com/catalogue/'+book.find('a')['href'].replace('../', '')
-                img_url = 'https://books.toscrape.com/' + book.find('img')['src'].replace('../', '')
-                name_img = book.find('img')['alt']
-                print(name_img)
-                print(img_url)
-                response = requests.get(img_url)
-                with open(os.path.join(name,name_img+'.jpg'), "wb") as f:
-                    f.write(response.content)
-
-               # with open(name+"/fichier.csv", 'a', newline='') as f:
-
-                #    spamwriter = csv.writer(f, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-       #             spamwriter.writerow(scrape_book(all_book))
-
-                #page_next = pagination(url)
-                #r = requests.get(page_next)
-                #soup = BeautifulSoup(r.content, 'lxml')
-                #all_book = soup.findAll('div', {'class': 'image_container'})
-                #url = page_next
-    else:#Écriture de fichier pour les rubrique avec une seule page
+    caractère_speciaux = '!/:"*?'       # création d'une variable string pour supprimer les caractère spéciaux
+    num = 0
+    while True:
+        all_book = soup.findAll('div', {'class': 'image_container'})    #Recupération de tout les lien de chaque book
         for book in all_book:
             all_book = 'https://books.toscrape.com/catalogue/' + book.find('a')['href'].replace('../', '')
-            img_url = 'https://books.toscrape.com/'+book.find('img')['src'].replace('../','')
+            data = scrape_book(all_book)    #appele de la fonction scrape_book
+            r = requests.get(data["link_img"])
+            for char in caractère_speciaux:
+                data['titre'] = data['titre'].replace(char,'')
+            with open(os.path.join('C:/OpenClassroom/P2_Boulahrouf_Ryad/' + name + '/img', data['titre'] + '.png'), "wb") as f:
+                f.write(r.content)
+                f.close()
 
-            with open(name,'wb') as file_url:
-                r = requests.get(img_url)
-                file_url.write(r.content)
-            with open(name + "/fichier.csv", 'a', newline='') as f:
-                spamwriter = csv.writer(f, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                spamwriter.writerow(scrape_book(all_book))
+            with open(name + "/fichier.csv",'a',newline='') as f:
+                writer = csv.writer(f, delimiter = ',')
+                num=num+1
+                if (num==1):
+                    writer.writerow(data["caractéristique_name"])
+                writer.writerow(data["caractéristique_info"])
+
+
+        if soup.find('li', {'class': 'next'}):  # si le bouton next est là
+            page_next = url + soup.find('li', {'class': 'next'}).find('a')['href']
+            r = requests.get(page_next)
+            soup = BeautifulSoup(r.content, 'lxml')
+
+        if not soup.find('li', {'class': 'next'}): # si le bouton next n'est pas la fin de la boucle while
+            print("fin de la rubrique")
+            break
 
 
 def main():
@@ -56,8 +50,9 @@ def main():
     parser.add_argument('--url')
     parser.add_argument('--name')
     args = parser.parse_args()
-    print(scrape_categorie(args.url,args.name))
+    print(scrape_categorie(args.url, args.name))
 
 
 if __name__ == '__main__':
     main()
+
