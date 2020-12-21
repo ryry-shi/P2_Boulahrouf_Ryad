@@ -19,7 +19,7 @@ def scrape_categorie(url, name):
         writer = csv.writer(f, delimiter=';')
 
         while True:
-            all_book = soup.findAll('div', {'class': 'image_container'})      # recupération de tout les lien de chaque book
+            all_book = soup.findAll('div', {'class': 'image_container'})  # recupération de tout les lien de chaque book
             for book in all_book:
                 end_book = book.find('a')['href'].replace('../', '')
                 all_book = 'https://books.toscrape.com/catalogue/' + end_book
@@ -31,28 +31,27 @@ def scrape_categorie(url, name):
                 if data['link_img'] =="https://books.toscrape.com/media/cache/ac/1a/ac1a0546d9cdf6cd82ab7712a6c418df.jpg":
                     print("img")
                     i = "(1)"
-                with open(os.path.join('C:/OpenClassroom/P2_Boulahrouf_Ryad/' + name + '/img', data['titre'] + i +'.png'), "wb") as f:
+                with open(os.path.join('C:/OpenClassroom/P2_Boulahrouf_Ryad/' + name +\
+                                       '/img', data['titre'] + i + '.png'), "wb") as f:
                     f.write(r.content)
                     f.close()
 
-
                     num = num+1
-                    #print(num)
-                    if(num == 1):
+                    if num == 1:
                         print(all_book)
                         writer.writerow(data["caractéristique_name"])
-                    writer.writerow([data["caractéristique_info"]] + [data["titre"]]+ [data['link_img']] + [data["texte"]])
+                    writer.writerow([data["caractéristique_info"]] + [data["titre"]] + [data['link_img']] +\
+                                    [data["texte"]])
 
-            if soup.find('li', {'class': 'next'}):      #si le bouton next est là
+            if soup.find('li', {'class': 'next'}):      # si le bouton next est là
                 end_link = soup.find('li', {'class': 'next'}).find('a')['href']
                 page_next = url + end_link
                 print(page_next)
                 r = requests.get(page_next)
                 soup = BeautifulSoup(r.content, 'lxml')
             elif not soup.find('li', {'class': 'next'}):
-                print("fin de la rubrique " +  (name) )
+                print("fin de la rubrique " + name)
                 break
-
 
 
 def main():
