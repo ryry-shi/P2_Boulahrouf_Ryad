@@ -15,8 +15,8 @@ def scrape_categorie(url, name):
     soup = BeautifulSoup(r.content, 'lxml')
     caractère_speciaux = '!/:,"*?'               # création d'une variable string pour supprimer les caractère spéciaux
     num = 0
-    with open(name + "/fichier.csv", 'a', newline='', encoding="utf-8") as f:
-        writer = csv.writer(f, delimiter=';')
+    with open(name + "/fichier.csv", 'a', newline='',encoding='utf-16') as f:
+        writer = csv.writer(f, delimiter=';', quoting=csv.QUOTE_NONNUMERIC)
 
         while True:
             all_book = soup.findAll('div', {'class': 'image_container'})  # recupération de tout les lien de chaque book
@@ -32,16 +32,20 @@ def scrape_categorie(url, name):
                     print("img")
                     i = "(1)"
                 with open(os.path.join('C:/OpenClassroom/P2_Boulahrouf_Ryad/' + name +\
-                                       '/img', data['titre'] + i + '.png'), "wb") as f:
-                    f.write(r.content)
-                    f.close()
+                                       '/img', data['titre'] + i + '.png'), "wb") as file:
+                    file.write(r.content)
+                    file.close()
 
                     num = num+1
                     if num == 1:
                         print(all_book)
-                        writer.writerow(data["caractéristique_name"])
-                    writer.writerow([data["caractéristique_info"]] + [data["titre"]] + [data['link_img']] +\
-                                    [data["texte"]])
+                        writer.writerow([data["UPC"]] + [data["Product Type"]] + [data["price excl"]] + \
+                                        [data["price incl"]] + [data["tax"]] + [data["avaibility"]] + \
+                                        ["rewiew"] + ["Titre"] +["rating"] +["Description"] + ["url image"])
+                    writer.writerow([data["info_un"]] + [data["info_deux"]] + [data["info_trois"]] + \
+                                    [data["info_quatre"]] + [data["info_cinq"]] + [data["info_six"]] +\
+                                    [data["info_sept"]] +[data["titre"]]+ [data["etoile"]] +\
+                                    [data["texte"]] + [data["link_img"]])
 
             if soup.find('li', {'class': 'next'}):      # si le bouton next est là
                 end_link = soup.find('li', {'class': 'next'}).find('a')['href']
