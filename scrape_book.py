@@ -30,7 +30,7 @@ def scrape_book(url):
     category = soup.find('ul', {'class': 'breadcrumb'}).findAll('a')[2].text
     product_information = soup.find('table', {'class': 'table table-striped'}).findAll('td')
     universal_product_code = product_information[0].text
-    product_page_url = product_information[1].text
+    product_page_url = url
     price_including_tax = product_information[2].text
     price_excluding_tax = product_information[3].text
     tax = product_information[4].text
