@@ -19,7 +19,7 @@ def removesuffix(self: str, suffix: str, /) -> str:
 
 
 def scrape_book(url):
-    dict_data = {}
+    """ Fonction qui prend en argument l'url du site et en extrait les données et les return """
     r = requests.get(url)
     soup = BeautifulSoup(r.content, 'lxml')
     title = soup.find('div', {'class': 'col-sm-6 product_main'}).find('h1').text
@@ -39,14 +39,13 @@ def scrape_book(url):
     number_available = removesuffix(number_available, "available)")
     number_of_reviews = product_information[6].text
     review_rating = soup.find("p", {"class": "star-rating"})['class'][1]
-    liste_rating = ["One", "Two", "Three", "Four", "Five"].index(review_rating)
+    liste_rating = ["One", "Two", "Three", "Four", "Five"].index(review_rating)+1
 
-    dict_data = {"product_page_url": product_page_url, "universal_product_code": universal_product_code,
+    return {"product_page_url": product_page_url, "universal_product_code": universal_product_code,
                  "title": title, "price_including_tax": price_including_tax,
                  "price_excluding_tax": price_excluding_tax, "tax": tax, "number_available": number_available,
                  "number_of_reviews": number_of_reviews, "product_description": product_description,
-                 "category": category, "review_rating": review_rating, "image_url": image_url}
-    return dict_data
+                 "category": category, "review_rating": liste_rating, "image_url": image_url }
 
 
 def main():
