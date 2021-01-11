@@ -9,7 +9,6 @@ import csv
 def scrape_category(url, name):
     r = requests.get(url)
     url = url.replace('index.html', '')             # replace l'index.html
-    soup = BeautifulSoup(r.content, 'lxml')
     string_sup = '!/:,"*?'               # Creation d'une variable string pour supprimer les caractère spéciaux
     num = 0
     with open(os.path.join('C:/OpenClassroom/P2_Boulahrouf_Ryad/data', name + '.csv', ), 'w', newline="",
@@ -20,6 +19,7 @@ def scrape_category(url, name):
         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';', quoting=csv.QUOTE_NONNUMERIC)
         writer.writeheader()
         while True:
+            soup = BeautifulSoup(r.content, 'lxml')
             all_book = soup.findAll('div', {'class': 'image_container'})  # recuperation de tout les book
             for book in all_book:
                 end_book = book.find('a')['href'].replace('../', '')
@@ -27,12 +27,12 @@ def scrape_category(url, name):
                 data = scrape_book(all_book)
                 print(data["image_url"])
                 r = requests.get(data["image_url"])
-                for char in string_sup:         # suppression des caractère spéciau
+                for char in string_sup:         # suppression des caractere speciaux
                     data['title'] = data['title'].replace(char, '')
                 i = ""
                 if data["image_url"] == "https://books.toscrape.com/media/cache/ac/1a/ac1a0546d9cdf6cd82ab7712a6c418df.jpg":
                     i = "(1)"
-                with open(os.path.join('C:/OpenClassroom/P2_Boulahrouf_Ryad/img', data['title'] + i + '.png'), "wb") \
+                with open(os.path.join('img', data['title'] + i + '.png'), "wb") \
                         as file:
                     file.write(r.content)
                     file.close()
@@ -52,7 +52,6 @@ def scrape_category(url, name):
                 end_link = soup.find('li', {'class': 'next'}).find('a')['href']
                 page_next = url + end_link
                 r = requests.get(page_next)
-                soup = BeautifulSoup(r.content, 'lxml')
             elif not soup.find('li', {'class': 'next'}):        # Si le bouton next est pas là fin du programme
                 break
 
