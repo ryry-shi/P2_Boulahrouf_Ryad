@@ -7,7 +7,7 @@ import csv
 
 
 def scrape_category(url, name):
-    """ Fonction qui scrape toute les page d'une catégorie et appele la fonction scrape_book
+    """ Fonction qui scrape tout les book d'une catégorie et appele la fonction scrape_book
     pour extraire les information  """
     r = requests.get(url)
     url = url.replace('index.html', '')             # replace l'index.html

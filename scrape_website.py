@@ -5,7 +5,10 @@ import os
 
 
 def scrape_website(url):
-    """ Fonction qui va extraire le nom des catégorie et l'envois en argument a la fonction scrape_categoriedo """
+    """ Fonction qui va d'abord créer deux dossier un data où il y aura les fichier csv et un autre img où il y aura les
+    toutes les images télécharger. Il extrait le nom des catégorie et leur url et l'envois en url a la fonction
+     scrape_catégorie qui extrait tout les book d'une catégorie et appele la fonction scrape_book
+    pour extraire les information"""
     categories = []
     os.mkdir("data")        # Creation d'un dossier pour les fichier.csv
     os.mkdir("img")         # Creation d'un dossier pour les image
