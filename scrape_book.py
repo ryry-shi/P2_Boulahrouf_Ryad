@@ -19,16 +19,20 @@ def removesuffix(self: str, suffix: str, /) -> str:
 
 
 def scrape_book(url):
-    """ Fonction qui prend en argument l'url du site et en extrait les données et les return """
+    """ Fonction qui prend en argument l'url du site
+     et en extrait les données et les return """
     r = requests.get(url)
     soup = BeautifulSoup(r.content, 'lxml')
-    title = soup.find('div', {'class': 'col-sm-6 product_main'}).find('h1').text
-    image_url = 'https://books.toscrape.com/' + soup.find('div', {'class': 'item active'})\
+    title = soup.find('div', {'class': 'col-sm-6 product_main'})\
+        .find('h1').text
+    image_url = 'https://books.toscrape.com/' + \
+                soup.find('div', {'class': 'item active'})\
         .find('img')['src'].replace('../', '')
-
-    product_description = soup.find('head').find('meta', {'name': 'description'})['content'].replace('\n', '').strip()
+    product_description = soup.find('head')\
+        .find('meta', {'name': 'description'})['content'].replace('\n', '').strip()
     category = soup.find('ul', {'class': 'breadcrumb'}).findAll('a')[2].text
-    product_information = soup.find('table', {'class': 'table table-striped'}).findAll('td')
+    product_information = soup.find('table', {'class': 'table table-striped'})\
+        .findAll('td')
     universal_product_code = product_information[0].text
     product_page_url = url
     price_including_tax = product_information[2].text
@@ -42,10 +46,10 @@ def scrape_book(url):
     liste_rating = ["One", "Two", "Three", "Four", "Five"].index(review_rating)+1
 
     return {"product_page_url": product_page_url, "universal_product_code": universal_product_code,
-                 "title": title, "price_including_tax": price_including_tax,
-                 "price_excluding_tax": price_excluding_tax, "tax": tax, "number_available": number_available,
-                 "number_of_reviews": number_of_reviews, "product_description": product_description,
-                 "category": category, "review_rating": liste_rating, "image_url": image_url }
+            "title": title, "price_including_tax": price_including_tax,
+            "price_excluding_tax": price_excluding_tax, "tax": tax, "number_available": number_available,
+            "number_of_reviews": number_of_reviews, "product_description": product_description,
+            "category": category, "review_rating": liste_rating, "image_url": image_url}
 
 
 def main():
