@@ -1,4 +1,6 @@
-#Ignored environnement virtuel#
 env/
-data/
+__pycache__
 img/
+data/
+.idea/
+flake8
