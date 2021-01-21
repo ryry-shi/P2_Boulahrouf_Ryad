@@ -11,9 +11,9 @@ from P2_01_scrape_book import scrape_book
 def scrape_category(url, name):
     """ Fonction qui scrape tout les book d'une catégorie
      et appele la fonction scrape_book pour extraire les information  """
-    if os.path.exists("C:/OpenClassroom/P2_Boulahrouf_Ryad/"):
+    if os.path.exists("data"):
         pass
-    elif os.path.exists("C:/OpenClassroom/P2_Boulahrouf_Ryad/data"):
+    else:
         os.mkdir("data")
         os.mkdir("img")
     r = requests.get(url)
@@ -67,6 +67,7 @@ def scrape_category(url, name):
                 page_next = url + end_link
                 r = requests.get(page_next)
             elif not soup.find('li', {'class': 'next'}):
+                print("Fin de la categorie " + name)
                 break
 
 
