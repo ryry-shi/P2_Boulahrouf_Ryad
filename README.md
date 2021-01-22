@@ -1,5 +1,6 @@
     Instruction pour lancer les scripts:
     1
+    - Extraire le zip dans un dossier (hormis téléchargement)
     - Créer l'environnement virtuelle et le lancer 
     - Python -m venv venv       (création de l'environnement)
     - venv\scripts\activate     (activation)
