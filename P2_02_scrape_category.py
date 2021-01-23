@@ -1,10 +1,9 @@
-﻿import argparse
+import argparse
 import csv
 import os
-
+import os.path
 import requests
 from bs4 import BeautifulSoup
-
 from P2_01_scrape_book import scrape_book
 
 
@@ -18,8 +17,9 @@ def scrape_category(url, name):
         os.mkdir("img")
     r = requests.get(url)
     url = url.replace('index.html', '')
+    path = os.path.abspath("img")
     # Creation d'une variable string pour supprimer les caractère spéciaux
-    string_sup = '!/:,"*?'
+    string_sup = '!/:,""*?'
     num = 0
     with open(os.path.join('data', name + '.csv', ), 'w', newline="",
               encoding="utf-8") as f:
@@ -46,8 +46,12 @@ def scrape_category(url, name):
                 if data["image_url"] ==\
                         "https://books.toscrape.com/media/cache/ac/1a/ac1a0546d9cdf6cd82ab7712a6c418df.jpg":
                     i = "(1)"
+                if data["image_url"] ==\
+                    "https://books.toscrape.com/media/cache/ce/da/ceda6d577d0609261f997bd99872013b.jpg":
+                    data["title"] = data["title"].replace(" ","")
+                    print(data['title'])
 
-                with open(os.path.join('img', data['title'] + i + '.png'), "wb") \
+                with open(os.path.join(path, data['title']+".png"), "wb") \
                         as file:
                     file.write(r.content)
                     file.close()
