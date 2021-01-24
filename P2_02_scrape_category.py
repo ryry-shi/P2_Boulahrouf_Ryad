@@ -47,8 +47,8 @@ def scrape_category(url, name):
                         "https://books.toscrape.com/media/cache/ac/1a/ac1a0546d9cdf6cd82ab7712a6c418df.jpg":
                     i = "(1)"
                 if data["image_url"] ==\
-                    "https://books.toscrape.com/media/cache/ce/da/ceda6d577d0609261f997bd99872013b.jpg":
-                    data["title"] = data["title"].replace(" ","")
+                        "https://books.toscrape.com/media/cache/ce/da/ceda6d577d0609261f997bd99872013b.jpg":
+                    data["title"] = data["title"].replace(" ", "")
 
                 with open(os.path.join(path, data['title']+".png"), "wb") \
                         as file:
@@ -56,7 +56,8 @@ def scrape_category(url, name):
                     file.close()
                     num += 1
                     writer.writerow({"product_page_url": data["product_page_url"],
-                                     "universal_product_code": data["universal_product_code"], "title": data["title"],
+                                     "universal_product_code": data["universal_product_code"],
+                                     "title": data["title"],
                                      "price_including_tax": data["price_including_tax"],
                                      "price_excluding_tax": data["price_excluding_tax"],
                                      "number_available": data["number_available"],
