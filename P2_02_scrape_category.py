@@ -49,7 +49,6 @@ def scrape_category(url, name):
                 if data["image_url"] ==\
                     "https://books.toscrape.com/media/cache/ce/da/ceda6d577d0609261f997bd99872013b.jpg":
                     data["title"] = data["title"].replace(" ","")
-                    print(data['title'])
 
                 with open(os.path.join(path, data['title']+".png"), "wb") \
                         as file:
